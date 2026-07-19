@@ -50,7 +50,7 @@ Support for these families is being added incrementally; see the issues and comm
 
 ## Quick start
 
-> ⚠️ Early development — the API is not yet stable.
+> ⚠️ Early development — the API is not yet stable (coming soon).
 
 ```python
 import qdesigns as qd
