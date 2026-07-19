@@ -1,3 +1,20 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# PATENT-SENSITIVE — DO NOT COMMIT.
+# These working files contain unpublished, potentially patentable material
+# (communications mapping, Latin-square/cycling variant, "Claim-3" frame scheme).
+# Keep them out of the public repo until a patent is filed. Only the published
+# prior-art constructions (Wootters-Fields, Galois-ring GR(4,r)) belong in the
+# public package.
+# ─────────────────────────────────────────────────────────────────────────────
+src/qdesigns/main.py
+src/qdesigns/preflight_structural_gate.py
+qls_core.py
+**/qls_core.py
+results/
+structural_certificate.json
+# Quarantine folder for patent-derived files pending permanent deletion.
+_to_delete/
+
 # Internal planning / strategy docs (not for publication)
 MOONSHOT-OPPORTUNITY-ANALYSIS.md
 
@@ -29,3 +46,4 @@ Thumbs.db
 *.swp
 .idea/
 .vscode/
+_to_delete/
