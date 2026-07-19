@@ -6,13 +6,13 @@ import pytest
 import qdesigns as qd
 
 
-@pytest.mark.parametrize("d", [2, 3, 4, 5, 7, 8, 11])
+@pytest.mark.parametrize("d", [2, 3, 4, 5, 7, 8, 9, 11, 25, 27])
 def test_complete_set_has_d_plus_one_bases(d):
     mubs = qd.mub.construct(d)
     assert mubs.count == d + 1
 
 
-@pytest.mark.parametrize("d", [2, 3, 4, 5, 7, 8, 11, 13])
+@pytest.mark.parametrize("d", [2, 3, 4, 5, 7, 8, 9, 11, 13, 25, 27, 49])
 def test_mubs_verify(d):
     mubs = qd.mub.construct(d)
     cert = qd.verify(mubs)
@@ -22,9 +22,15 @@ def test_mubs_verify(d):
 
 
 @pytest.mark.parametrize("d", [4, 8])
-def test_prime_power_construction_label(d):
+def test_even_prime_power_uses_galois_ring(d):
     mubs = qd.mub.construct(d)
     assert "galois-ring" in mubs.construction
+
+
+@pytest.mark.parametrize("d", [9, 25, 27, 49])
+def test_odd_prime_power_uses_galois_field(d):
+    mubs = qd.mub.construct(d)
+    assert "galois-field" in mubs.construction
 
 
 @pytest.mark.parametrize("d", [3, 5, 7])
@@ -35,12 +41,17 @@ def test_unbiasedness_value(d):
     assert np.allclose(overlaps, 1.0 / d, atol=1e-9)
 
 
-def test_unsupported_dimension_not_implemented():
-    # 6 is not a prime power; 9 is an odd prime power not yet implemented.
+def test_non_prime_power_not_implemented():
+    # 6, 10, 12, 15 are not prime powers -> no known complete MUB set.
+    for d in (6, 10, 12, 15):
+        with pytest.raises(NotImplementedError):
+            qd.mub.construct(d)
+
+
+def test_large_even_prime_power_not_implemented():
+    # 16 = 2**4 is a prime power, but the GR(4, r) path currently covers only 4, 8.
     with pytest.raises(NotImplementedError):
-        qd.mub.construct(6)
-    with pytest.raises(NotImplementedError):
-        qd.mub.construct(9)
+        qd.mub.construct(16)
 
 
 def test_dimension_too_small():
