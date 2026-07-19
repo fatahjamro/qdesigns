@@ -6,19 +6,25 @@ import pytest
 import qdesigns as qd
 
 
-@pytest.mark.parametrize("d", [2, 3, 5, 7, 11])
+@pytest.mark.parametrize("d", [2, 3, 4, 5, 7, 8, 11])
 def test_complete_set_has_d_plus_one_bases(d):
     mubs = qd.mub.construct(d)
     assert mubs.count == d + 1
 
 
-@pytest.mark.parametrize("d", [2, 3, 5, 7, 11, 13])
+@pytest.mark.parametrize("d", [2, 3, 4, 5, 7, 8, 11, 13])
 def test_mubs_verify(d):
     mubs = qd.mub.construct(d)
     cert = qd.verify(mubs)
     assert cert.ok, cert.summary()
     assert cert.checks["each basis orthonormal"]
     assert cert.checks["pairwise mutually unbiased"]
+
+
+@pytest.mark.parametrize("d", [4, 8])
+def test_prime_power_construction_label(d):
+    mubs = qd.mub.construct(d)
+    assert "galois-ring" in mubs.construction
 
 
 @pytest.mark.parametrize("d", [3, 5, 7])
@@ -29,9 +35,12 @@ def test_unbiasedness_value(d):
     assert np.allclose(overlaps, 1.0 / d, atol=1e-9)
 
 
-def test_non_prime_not_implemented():
+def test_unsupported_dimension_not_implemented():
+    # 6 is not a prime power; 9 is an odd prime power not yet implemented.
     with pytest.raises(NotImplementedError):
         qd.mub.construct(6)
+    with pytest.raises(NotImplementedError):
+        qd.mub.construct(9)
 
 
 def test_dimension_too_small():
